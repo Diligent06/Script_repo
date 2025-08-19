@@ -1,0 +1,30 @@
+<!-- minimal_scene.xml -->
+<mujoco model="minimal">
+  <asset>
+    <texture name="floor_texture" type="2d" file="./data/Mujoco_data/stage_obj/floor.png"/>
+    <material name="floor_material" texture="floor_texture" specular="0.3"/>
+    <mesh name="floor" file="./data/Mujoco_data/stage_obj/floor.obj" />
+
+    <texture name="frl_apartment_book_01_texture" type="2d" file="./data/Mujoco_data/dynamic_obj/frl_apartment_book_01.png"/>
+    <material name="frl_apartment_book_01_material" texture="frl_apartment_book_01_texture" specular="0.3"/>
+    <mesh name="frl_apartment_book_01" file="./data/Mujoco_data/dynamic_obj/frl_apartment_book_01.obj" />
+
+    <texture name="6_bag_0_texture" type="2d" file="./data/Mujoco_data/static_obj/6_bag_0.png"/>
+    <material name="6_bag_0_material" texture="6_bag_0_texture" specular="0.3"/>
+    <mesh name="6_bag_0" file="./data/Mujoco_data/static_obj/6_bag_0.obj" />
+
+    <texture name="29_chair_0_texture" type="2d" file="./data/Mujoco_data/static_obj/29_chair_0.png"/>
+    <material name="29_chair_0_material" texture="29_chair_0_texture" specular="0.3"/>
+    <mesh name="29_chair_0" file="./data/Mujoco_data/static_obj/29_chair_0.obj" />
+
+  </asset>
+  <worldbody>
+    <geom name="floor" type="mesh" mesh="floor" material="floor_material"/>
+
+    <geom name="frl_apartment_book_01" type="mesh" mesh="frl_apartment_book_01" material="frl_apartment_book_01_material"/>
+
+    <geom name="6_bag_0" type="mesh" mesh="6_bag_0" material="6_bag_0_material"/>
+
+    <geom name="29_chair_0" type="mesh" mesh="29_chair_0" material="29_chair_0_material"/>
+  </worldbody>
+</mujoco>

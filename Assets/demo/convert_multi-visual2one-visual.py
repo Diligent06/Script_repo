@@ -28,6 +28,8 @@ def change_mtl_path(old, new, mtl_path):
     with open(mtl_path, 'w') as file:
         file.write(text)
     file.close()
+
+# convex decomposition 
 def calculate_convex(input_file, output_file):
     p.vhacd(
         input_file,
@@ -51,6 +53,8 @@ robot_pattern = r'<robot name=(.*?)>'
 xyz_pattern = r'<origin xyz=(.*?)/>'
 mesh_pattern = r'<mesh filename=(.*?)/>'
 visual_pattern = r'<visual name=(.*?)>'
+
+# which can change multiple visual and collision in a link into one visual and one collision
 
 if __name__ == '__main__':
     urdfs_folder = './partnet_mobility_part'
@@ -81,8 +85,8 @@ if __name__ == '__main__':
                 xyz_matches = re.findall(xyz_pattern, match, re.DOTALL)
                 xyz = xyz_matches[0]
                 link_list.append(f"\t<link name=\"link_{id}\">\n\t\t<visual name={visual_name}>\n\t\t\t<origin xyz={xyz}/>\n\t\t\t<geometry>\n\t\t\t\t\
-<mesh filename=\"textured_objs/link_{id}.obj\"/>\n\t\t\t</geometry>\n\t\t</visual>\n\t\t<collision>\n\t\t\t<origin xyz={xyz}/>\n\t\t\t\
-<geometry>\n\t\t\t\t<mesh filename=\"textured_objs/link_{id}_convex.obj\"/>\n\t\t\t</geometry>\n\t\t</collision>\n\t</link>")
+                                <mesh filename=\"textured_objs/link_{id}.obj\"/>\n\t\t\t</geometry>\n\t\t</visual>\n\t\t<collision>\n\t\t\t<origin xyz={xyz}/>\n\t\t\t\
+                                <geometry>\n\t\t\t\t<mesh filename=\"textured_objs/link_{id}_convex.obj\"/>\n\t\t\t</geometry>\n\t\t</collision>\n\t</link>")
                 mesh_matches = re.findall(mesh_pattern, match, re.DOTALL)
                 mesh_list = []
                 for mesh in mesh_matches:

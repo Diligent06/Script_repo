@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mujoco model="partnet_26616b8217bd2ef12619db0a5cf36754">
+  <worldbody>
+    <body name="link_0" pos="[1. 0. 0. 0.] [0. 1. 0. 0.] [0. 0. 1. 0.]">
+      <geom type="mesh" mesh="link_0_mesh" rgba="0.8 0.3 0.3 1"/>
+      <joint name="joint_0" type="fixed" axis="1.0 0.0 0.0" pos="[-3.8285687e-16 -3.8285687e-16 -1.0000000e+00  0.0000000e+00] [-1.00000000e+00  1.46579383e-31  3.82856870e-16  0.00000000e+00] [-0.0000000e+00  1.0000000e+00 -3.8285687e-16  0.0000000e+00]"/>
+    </body>
+    <body name="link_1" pos="[ 1.          0.          0.         -0.25428925] [ 0.          1.          0.         -0.82360297] [0.         0.         1.         0.10435184]">
+      <geom type="mesh" mesh="link_1_mesh" rgba="0.8 0.3 0.3 1"/>
+      <joint name="joint_1" type="revolute" axis="0.0 1.0 0.0" pos="[1.         0.         0.         0.25428925] [0.         1.         0.         0.82360297] [ 0.          0.          1.         -0.10435184]"/>
+    </body>
+    <body name="link_2" pos="[1.         0.         0.         0.18474875] [0.         1.         0.         0.19438196] [ 0.          0.          1.         -0.29111073]">
+      <geom type="mesh" mesh="link_2_mesh" rgba="0.8 0.3 0.3 1"/>
+      <joint name="joint_2" type="revolute" axis="-0.7071076016277473 1.6327306245056322e-08 -0.7071059607443956" pos="[ 1.        0.        0.       -0.439038] [ 0.          1.          0.         -1.01798493] [0.         0.         1.         0.39546257]"/>
+    </body>
+  </worldbody>
+  <asset>
+    <mesh name="link_0_mesh" file="textured_objs/link_0.obj"/>
+    <mesh name="link_1_mesh" file="textured_objs/link_1.obj"/>
+    <mesh name="link_2_mesh" file="textured_objs/link_2.obj"/>
+  </asset>
+  <default>
+    <joint limited="true" damping="1"/>
+  </default>
+</mujoco>

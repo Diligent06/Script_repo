@@ -98,8 +98,11 @@ def cal_navmesh(scene, scene_dataset, navmesh_save_path):
     # default = False
 
     navmesh_success = sim.recompute_navmesh(sim.pathfinder, navmesh_settings)
-    sim.pathfinder.save_nav_mesh(navmesh_save_path)
-    print('Saved NavMesh to "' + navmesh_save_path + '"')
+    if navmesh_success:
+        sim.pathfinder.save_nav_mesh(navmesh_save_path)
+        print('Saved NavMesh to "' + navmesh_save_path + '"')
+    else:
+        print('Failed NavMesh generation!')
     return
 
 def make_cfg(settings):
@@ -190,6 +193,12 @@ if __name__ == '__main__':
             type=bool,
             help='Whether need to convert urdf files'
         )
+        parser.add_argument(
+            '--scale',
+            default=1.0,
+            type=float,
+            help='object scale in scene'
+        )
         args = parser.parse_args()
 
         if not os.path.exists(args.glb_folder_path):
@@ -205,7 +214,7 @@ if __name__ == '__main__':
         stages_save_path = "../../stages/"
         configs_scenes_path = join(join(args.output_folder, args.dataset_name), 'configs/scenes/')
         configs_lighting_path = join(join(args.output_folder, args.dataset_name), 'configs/lighting/')
-        configs_ssd_path = join(join(args.output_folder, args.dataset_namej), 'configs/ssd/')
+        configs_ssd_path = join(join(args.output_folder, args.dataset_name), 'configs/ssd/')
         configs_navmeshes_path = join(join(args.output_folder, args.dataset_name), 'navmeshes/')
         urdf_path = join(join(args.output_folder, args.dataset_name), "urdfs/")
         urdf_save_path = '../../urdfs'
@@ -247,7 +256,7 @@ if __name__ == '__main__':
             instance = {}
             instance.update({"template_name": "objects/static/"+prefix, "motion_type": "STATIC", \
                              "translation": mesh.centroid.tolist(),\
-                             "transformation": {"scale": [0.1, 0.1, 0.1]}})
+                             "transformation": {"scale": [args.scale, args.scale, args.scale]}})
             object_instance.append(instance)
             max_height = np.maximum(max_height, mesh.centroid[1])
             # dump json data of each object
@@ -285,7 +294,7 @@ if __name__ == '__main__':
                             "friction_coefficient": 1,
                             "restitution_coefficient": 0.01,
                             "translation": mesh.centroid.tolist(),\
-                            "transformation": {"scale": [0.1, 0.1, 0.1]}})
+                            "transformation": {"scale": [args.scale, args.scale, args.scale]}})
             object_instance.append(instance)
             max_height = np.maximum(max_height, mesh.centroid[1])
             # dump json data of each object
@@ -312,7 +321,7 @@ if __name__ == '__main__':
                 bounds = mesh.bounds
                 stage_instance.update({"template_name": "stages/" + prefix, \
                                        "translation": mesh.centroid.tolist(),\
-                                       "transformation": {"scale": [0.1, 0.1, 0.1]}})
+                                       "transformation": {"scale": [args.scale, args.scale, args.scale]}})
                 scene_prefix = prefix
             # dump json data of each stage
             with open(json_file_path, 'w') as json_file:
@@ -325,12 +334,17 @@ if __name__ == '__main__':
             for f in os.scandir(join(args.glb_folder_path, 'urdfs/')):
                 dest_path = os.path.join(urdf_path, os.path.basename(f.path))
                 shutil.copytree(f.path, dest_path, dirs_exist_ok=True)
-                for file in os.listdir(os.path.join(urdf_path, os.path.basename(f.path))):
-                    if file.endswith('.urdf'):
-                        name, ext = os.path.splitext(file)
-                        articulated_dict = {}
-                        articulated_dict.update({"template_name": name, "translation_origin": "COM", "fixed_base": True, "uniform_scale": 1, "motion_type": "DYNAMIC"})
-                        articulated_instance.append(articulated_dict)
+                if os.path.exists(join(join(urdf_path, os.path.basename(f.path)), f'{os.path.basename(f.path)}.urdf')):
+                    name = os.path.basename(f.path)
+                    articulated_dict = {}
+                    articulated_dict.update({"template_name": name, "translation_origin": "COM", "fixed_base": True, "uniform_scale": 1, "motion_type": "DYNAMIC"})
+                    articulated_instance.append(articulated_dict)
+                # for file in os.listdir(os.path.join(urdf_path, os.path.basename(f.path))):
+                #     if file.endswith('.urdf'):
+                #         name, ext = os.path.splitext(file)
+                #         articulated_dict = {}
+                #         articulated_dict.update({"template_name": name, "translation_origin": "COM", "fixed_base": True, "uniform_scale": 1, "motion_type": "DYNAMIC"})
+                #         articulated_instance.append(articulated_dict)
 
         # add default lighting in the scene
         scene_data.update({"default_lighting": "lighting/" + scene_prefix})
