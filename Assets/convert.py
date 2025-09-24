@@ -376,6 +376,8 @@ class GLB2USD():
 
     def convert(self, source_path, output_folder, scene_config_file):
         scene_name = scene_config_file.split('/')[-1].split('.')[0]
+        if os.path.exists(join(output_folder, f'{scene_name}')):
+            return
         self.copy_scene(scene_config_file, source_path, join(output_folder, f'{scene_name}'))
         info_path = join(join(output_folder, f'{scene_name}'), f'{scene_name}.scene_instance.json')
         self.convert_glbs_usds(join(output_folder, f'{scene_name}'), join(output_folder, f'{scene_name}_usd'))
@@ -518,10 +520,18 @@ class GLB2USD():
             for item in object_instance:
                 if item["template_name"] == folder:
                     usd_path = join(join(source_folder, folder), f'{folder}.usd')
-                    
-                    translation = item["translation"]
-                    rotation = item["rotation"]
-                    scale = item["non_uniform_scale"]
+                    if "translation" in item.keys():
+                        translation = item["translation"]
+                    else:
+                        translation = [0, 0, 0]
+                    if "rotation" in item.keys():
+                        rotation = item["rotation"]
+                    else:
+                        rotation = [1, 0, 0, 0]
+                    if "non_uniform_scale" in item.keys():
+                        scale = item["non_uniform_scale"]
+                    else:
+                        scale = [1, 1, 1]
                     bpy.ops.wm.read_factory_settings(use_empty=True)
                     bpy.ops.wm.usd_import(filepath=usd_path)
                     # transform from habitat coordinate to isaac coordinate
